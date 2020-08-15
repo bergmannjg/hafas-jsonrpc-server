@@ -54,7 +54,7 @@ const choose = (p: string): createClient.Profile => {
 };
 
 function isLocationsRequest(req: any): req is LocationsRequestParams {
-    return req && req.from && req.to && req.options;
+    return req && req.name && req.options;
 }
 
 function isJourneysRequest(req: any): req is JourneysRequestParams {

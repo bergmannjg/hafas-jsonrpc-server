@@ -6,7 +6,7 @@ The messages are transmitted via standard input/output streams.
 
 Implemented with the [VSCode JSON RPC](https://www.npmjs.com/package/vscode-jsonrpc) module.
 
-This work in progess.
+There is a [F# client](https://github.com/bergmannjg/hafas-jsonrpc-client-fsharp) using this server app.
 
 ## Program arguments
 
@@ -31,10 +31,12 @@ Get current profile.
 
 ## Locations Request
 
+Call [locations](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/a974df8111417398c9ae11b32e9a06a79da78197/types/hafas-client/index.d.ts#L780) method.
+
 *Request*:
 
 * method: locations
-* params: LocationsRequestParams defined [here](./src/types.ts)
+* params: [LocationsRequestParams](https://github.com/bergmannjg/hafas-jsonrpc-server/blob/7282e26b2948cf19f045ccf1a1f4957ca4f40097/src/types.ts#L3)
 
 *Response*:
 
@@ -42,10 +44,12 @@ Get current profile.
 
 ## Journeys Request
 
+Call [journeys](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/a974df8111417398c9ae11b32e9a06a79da78197/types/hafas-client/index.d.ts#L748) method.
+
 *Request*:
 
 * method: journeys
-* params: LocationsRequestParams defined [here](./src/types.ts)
+* params: [JourneysRequestParams](https://github.com/bergmannjg/hafas-jsonrpc-server/blob/7282e26b2948cf19f045ccf1a1f4957ca4f40097/src/types.ts#L8)
 
 *Response*:
 
