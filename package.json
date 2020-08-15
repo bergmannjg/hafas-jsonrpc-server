@@ -1,0 +1,19 @@
+{
+  "name": "hafas-client-node-io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hafas-client": "^5.6.0",
+    "vscode-jsonrpc": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/hafas-client": "^5.6.0",
+    "@types/node": "^14.0.5"
+  }
+}
