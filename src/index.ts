@@ -1,6 +1,6 @@
 import * as rpc from 'vscode-jsonrpc';
 import createClient from 'hafas-client';
-import type {LocationsRequestParams, JourneysRequestParams} from './types'
+import type { LocationsRequestParams, JourneysRequestParams, TripRequestParams } from './types'
 
 import bvgProfile = require('hafas-client/p/bvg');
 import cflProfile = require('hafas-client/p/cfl');
@@ -61,6 +61,10 @@ function isJourneysRequest(req: any): req is JourneysRequestParams {
     return req && req.from && req.to && req.options;
 }
 
+function isTripRequest(req: any): req is TripRequestParams {
+    return req && req.id && req.name && req.options;
+}
+
 const profile = process.argv.length > 2 ? choose(process.argv[2]) : dbProfile;
 const client = createClient(profile, 'client')
 
@@ -87,6 +91,15 @@ connection.onRequest("locations", (params: any) => {
     }
     else {
         return new rpc.ResponseError(rpc.ErrorCodes.InvalidParams, "parameter 'name' expected")
+    }
+});
+
+connection.onRequest("trip", (params: any) => {
+    if (isTripRequest(params)) {
+        return client.trip(params.id, params.name, params.options);
+    }
+    else {
+        return new rpc.ResponseError(rpc.ErrorCodes.InvalidParams, "parameter 'id' and 'name' expected")
     }
 });
 
