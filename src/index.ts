@@ -95,7 +95,7 @@ connection.onRequest("locations", (params: any) => {
 });
 
 connection.onRequest("trip", (params: any) => {
-    if (isTripRequest(params)) {
+    if (isTripRequest(params) && client.trip) {
         return client.trip(params.id, params.name, params.options);
     }
     else {
