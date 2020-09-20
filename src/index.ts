@@ -1,5 +1,5 @@
 import * as rpc from 'vscode-jsonrpc';
-import createClient, { Journey, Leg, Hint, Warning } from 'hafas-client';
+import createClient, { Journey, Leg, Hint, StopOver } from 'hafas-client';
 import type { LocationsRequestParams, JourneysRequestParams, TripRequestParams } from './types'
 import { set } from 'lodash';
 
@@ -69,23 +69,18 @@ function isTripRequest(req: any): req is TripRequestParams {
 // set the property 'type' as the first property in type 'Hint'
 // see https://github.com/public-transport/hafas-client/blob/fddf25a42997069e6ef634364e9be54b82c5ef21/p/db/index.js#L429
 // FSharp.SystemTextJson needs union tag name as first property
-function reorderHint(journeys: createClient.Journeys, path: string[], hint: Hint) {
-    const newHint = Object.assign({ type: 'hint' }, hint);
-    set(journeys, path, newHint);
-}
-
 function reorderHints(journeys: createClient.Journeys): createClient.Journeys {
     journeys.journeys?.forEach((journey, iJourney) => {
         journey.legs.forEach((leg, iLeg) => {
             leg.remarks?.forEach((remark, iRemark) => {
                 if (remark.type === 'hint') {
-                    reorderHint(journeys, ['journeys', iJourney.toString(), 'legs', iLeg.toString(), 'remarks', iRemark.toString()], remark)
+                    (((journeys.journeys as Journey[])[iJourney].legs as Leg[])[iLeg].remarks as Hint[])[iRemark] = Object.assign({ type: 'hint' }, remark);
                 }
             })
             leg.stopovers?.forEach((stopover, iStopover) => {
                 stopover.remarks?.forEach((remark, iRemark) => {
                     if (remark.type === 'hint') {
-                        reorderHint(journeys, ['journeys', iJourney.toString(), 'legs', iLeg.toString(), 'stopovers', iStopover.toString(), 'remarks', iRemark.toString()], remark)
+                        ((((journeys.journeys as Journey[])[iJourney].legs as Leg[])[iLeg].stopovers as StopOver[])[iStopover].remarks as Hint[])[iRemark] = Object.assign({ type: 'hint' }, remark);
                     }
                 })
             })
@@ -107,10 +102,7 @@ connection.onRequest("profile", () => {
 
 connection.onRequest("journeys", (params: any) => {
     if (isJourneysRequest(params)) {
-        return client.journeys(params.from, params.to, params.options)
-            .then(result => {
-                return reorderHints(result)
-            });
+        return client.journeys(params.from, params.to, params.options).then(result => reorderHints(result));
     }
     else {
         return new rpc.ResponseError(rpc.ErrorCodes.InvalidParams, "parameter 'from' and 'to' expected")
