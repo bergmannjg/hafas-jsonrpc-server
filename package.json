@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/lodash": "^4.14.161",
     "hafas-client": "^5.7.1",
+    "lodash": "^4.17.20",
     "vscode-jsonrpc": "^5.0.1"
   },
   "devDependencies": {
